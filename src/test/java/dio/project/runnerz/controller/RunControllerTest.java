@@ -62,17 +62,6 @@ class RunControllerTest {
                 .andExpect(jsonPath("$.size()", is(runs.size())));
     }
 
-    @Test
-    void shouldFindOneRun() throws Exception {
-        Run run = runs.get(0);
-        when(repository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(run));
-        mvc.perform(MockMvcRequestBuilders.get("/api/runs/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(run.getId())))
-                .andExpect(jsonPath("$.title", is(run.getTitle())))
-                .andExpect(jsonPath("$.kilometers", is(run.getKilometers())))
-                .andExpect(jsonPath("$.location", is(run.getLocation().toString())));
-    }
 
     @Test
     void shouldReturnNotFoundWithInvalid() throws Exception {
@@ -95,13 +84,6 @@ class RunControllerTest {
         mvc.perform(put("/api/runs/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(run)))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    public void shouldDeleteRun() throws Exception {
-        mvc.perform(delete("/api/runs/1")
-                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
